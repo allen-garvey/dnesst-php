@@ -4,13 +4,13 @@ Parser for SCSS style css nesting to enable other languages besides sass to gene
 
 ## Dependencies
 
-* PHP >= 7.2
-* 
+* PHP >= 7.2 with `cli` module
 
 ## Getting Started
 
-* 
-* 
+* `git clone` or download this repositiory
+* `cd` into the project directory
+* Run `php src/dnesst.php`
 
 ## License
 
