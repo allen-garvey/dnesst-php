@@ -24,28 +24,28 @@ $currentAttribute = null;
 //required to use preg_split to get each character in unicode string
 //https://stackoverflow.com/questions/1293950/php-split-a-string-in-to-an-array-foreach-char
 foreach (preg_split('//u', file_get_contents($inputFileName), null, PREG_SPLIT_NO_EMPTY) as $char) {
-    if($parserState->quoteState == ParserState::QUOTE_STATE_SINGLE_QUOTES && $char == "'"){
-        $parserState->quoteState = ParserState::QUOTE_STATE_NONE;
-        continue;
-    }
-
-    if($parserState->quoteState == ParserState::QUOTE_STATE_DOUBLE_QUOTES && $char == '"'){
-        $parserState->quoteState = ParserState::QUOTE_STATE_NONE;
-        continue;
-    }
-
-    if($parserState->quoteState != ParserState::QUOTE_STATE_NONE){
+    if($parserState->quoteState != ParserState::QUOTE_STATE_NONE && !($parserState->quoteState == ParserState::QUOTE_STATE_SINGLE_QUOTES && $char == "'") && !($parserState->quoteState == ParserState::QUOTE_STATE_DOUBLE_QUOTES && $char == '"')){
         $currentValue .= $char;
         continue;
     }
 
     switch($char){
         case '"':
-            $parserState->quoteState = ParserState::QUOTE_STATE_DOUBLE_QUOTES;
-            continue 2; //continue foreach https://www.php.net/manual/en/control-structures.continue.php
+            if($parserState->quoteState == ParserState::QUOTE_STATE_DOUBLE_QUOTES){
+                $parserState->quoteState = ParserState::QUOTE_STATE_NONE;
+            }
+            else{
+                $parserState->quoteState = ParserState::QUOTE_STATE_DOUBLE_QUOTES;
+            }
+            break;
         case "'":
-            $parserState->quoteState = ParserState::QUOTE_STATE_SINGLE_QUOTES;
-            continue 2; //continue foreach https://www.php.net/manual/en/control-structures.continue.php
+            if($parserState->quoteState == ParserState::QUOTE_STATE_SINGLE_QUOTES){
+                $parserState->quoteState = ParserState::QUOTE_STATE_NONE;
+            }
+            else{
+                $parserState->quoteState = ParserState::QUOTE_STATE_SINGLE_QUOTES;
+            }
+            break;
         case '{':
             $currentNode = new Node($currentValue);
             end($nodeStack)->children[] = $currentNode;

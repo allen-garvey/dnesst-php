@@ -6,3 +6,11 @@
     }
     color: black;
 }
+
+.list .list-item{
+    input[type="text"]{
+        background-image: url('images/background.png');
+    }
+
+    display: flex;
+}
