@@ -20,6 +20,10 @@ $nodeStack = [$rootNode]; //used to keep track of how nested the current node tr
 $currentValue = ''; //stores either current node/attribute name, or attribute value
 $currentAttribute = null;
 
+function trimValue($str){
+    return preg_replace("/^\\s+|\\s+$/", '', $str);
+}
+
 //iterate over each character in string
 //required to use preg_split to get each character in unicode string
 //https://stackoverflow.com/questions/1293950/php-split-a-string-in-to-an-array-foreach-char
@@ -47,7 +51,7 @@ foreach (preg_split('//u', file_get_contents($inputFileName), null, PREG_SPLIT_N
             }
             break;
         case '{':
-            $currentNode = new Node($currentValue);
+            $currentNode = new Node(trimValue($currentValue));
             end($nodeStack)->children[] = $currentNode;
             $nodeStack[] = $currentNode;
             $currentValue = '';
@@ -57,21 +61,19 @@ foreach (preg_split('//u', file_get_contents($inputFileName), null, PREG_SPLIT_N
             continue 2; //continue foreach https://www.php.net/manual/en/control-structures.continue.php
         case ':':
             $parserState->isInAttributeValue = true;
-            $currentAttribute = new Attribute($currentValue, '');
+            $currentAttribute = new Attribute(trimValue($currentValue), '');
             $currentValue = '';
             continue 2; //continue foreach https://www.php.net/manual/en/control-structures.continue.php
         case ';':
             $parserState->isInAttributeValue = false;
-            $currentAttribute->value = $currentValue;
+            $currentAttribute->value = trimValue($currentValue);
             $currentValue = '';
             end($nodeStack)->attributes[] = $currentAttribute;
             $currentAttribute = null;
             continue 2; //continue foreach https://www.php.net/manual/en/control-structures.continue.php
     }
-    //not a special char, so just regular string
-    if(!preg_match("/\\s/", $char)){
-        $currentValue .= $char;
-    }
+
+    $currentValue .= $char;
 }
 
 
