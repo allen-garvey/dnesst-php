@@ -5,6 +5,7 @@ define('MODELS_PATH', dirname(__FILE__).'/models/');
 require_once MODELS_PATH.'node.php';
 require_once MODELS_PATH.'attribute.php';
 require_once MODELS_PATH.'parser-state.php';
+require_once  dirname(__FILE__).'/helpers.php';
 
 //do input filename validation here
 $inputFileName = './tests/test1.scss';
@@ -20,10 +21,6 @@ $nodeStack = [$rootNode]; //used to keep track of how nested the current node tr
 $currentValue = ''; //stores either current node/attribute name, or attribute value
 $previousChar = '';
 $currentAttribute = null;
-
-function trimValue($str){
-    return preg_replace("/^\\s+|\\s+$/", '', $str);
-}
 
 //iterate over each character in string
 //required to use preg_split to get each character in unicode string
