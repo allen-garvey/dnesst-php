@@ -50,8 +50,9 @@ foreach (preg_split('//u', file_get_contents($inputFileName), null, PREG_SPLIT_N
             }
             break;
         case '{':
-            $currentNode = new Node(trimValue($currentValue));
-            end($nodeStack)->children[] = $currentNode;
+            $parent = end($nodeStack);
+            $currentNode = parseNode($currentValue, $parent);
+            $parent->children[] = $currentNode;
             $nodeStack[] = $currentNode;
             $currentValue = '';
             $previousChar = '';

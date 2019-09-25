@@ -13,6 +13,10 @@
     }
 
     display: flex;
+
+    &.selected{
+        text-decoration: none;
+    }
 }
 
 .another-list   .another-list-item{
