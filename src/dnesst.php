@@ -20,7 +20,6 @@ $rootNode = new Node('');
 $nodeStack = [$rootNode]; //used to keep track of how nested the current node tree is
 $currentValue = ''; //stores either current node/attribute name, or attribute value
 $previousChar = '';
-$currentAttribute = null;
 
 //iterate over each character in string
 //required to use preg_split to get each character in unicode string
@@ -61,19 +60,10 @@ foreach (preg_split('//u', file_get_contents($inputFileName), null, PREG_SPLIT_N
             array_pop($nodeStack);
             $previousChar = '';
             continue 2; //continue foreach https://www.php.net/manual/en/control-structures.continue.php
-        case ':':
-            $parserState->isInAttributeValue = true;
-            $currentAttribute = new Attribute(trimValue($currentValue), '');
-            $currentValue = '';
-            $previousChar = '';
-            continue 2; //continue foreach https://www.php.net/manual/en/control-structures.continue.php
         case ';':
-            $parserState->isInAttributeValue = false;
-            $currentAttribute->value = trimValue($currentValue);
+            end($nodeStack)->attributes[] = parseAttribute($currentValue);
             $currentValue = '';
             $previousChar = '';
-            end($nodeStack)->attributes[] = $currentAttribute;
-            $currentAttribute = null;
             continue 2; //continue foreach https://www.php.net/manual/en/control-structures.continue.php
     }
 

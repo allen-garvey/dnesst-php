@@ -4,7 +4,6 @@ namespace Dnesst;
 
 class ParserState{
     public $quoteState;
-    public $isInAttributeValue;
     public $currentParseValue;
 
     const QUOTE_STATE_NONE = 0;
@@ -13,7 +12,6 @@ class ParserState{
 
     function __construct(){
         $this->quoteState = ParserState::QUOTE_STATE_NONE;
-        $this->isInAttributeValue = false;
         $this->currentParseValue = '';
     }
     
