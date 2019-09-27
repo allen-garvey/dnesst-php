@@ -26,3 +26,13 @@
         font-weight: bold;
     }
 }
+
+.section{
+    &__wrapper{
+        display: none;
+    }
+
+    &::after{
+        content: "hello";
+    }
+}
