@@ -35,4 +35,13 @@
     &::after{
         content: "hello";
     }
+
+    * > div{
+        -webkit-transform: translate(3px 100px);
+        transform: translate(3px 100px);     
+    }
+
+    & + .section{
+        text-transform: uppercase;
+    }
 }
